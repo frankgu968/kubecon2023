@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: converter-config
+data:
+  PORT: "8081"
+  RUN_ENV: "production"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: converter
+  labels:
+    app: converter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: converter
+  template:
+    metadata:
+      labels:
+        app: converter
+    spec:
+      containers:
+      - name: app
+        image: frankgu968/kubecon2023-converter:latest
+        ports:
+        - name: app
+          containerPort: 8081
+        envFrom:
+        - configMapRef:
+            name: converter-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: converter
+spec:
+  selector:
+    app: converter
+  ports:
+    - name: app
+      protocol: TCP
+      port: 8080
+      targetPort: 8081
