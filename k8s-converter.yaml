@@ -42,5 +42,5 @@ spec:
   ports:
     - name: app
       protocol: TCP
-      port: 8080
+      port: 7001
       targetPort: 8081
