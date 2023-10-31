@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "configurations": [
+    {
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "name": "Local Debug",
+      "restart": true,
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/ts-node-dev",
+      "skipFiles": [ "<node_internals>/**" ],
+      "type": "node",
+      "runtimeArgs": [ "--respawn" ],
+      "envFile": "${workspaceFolder}/.env",
+      "args": [ "${workspaceFolder}/src/index.ts" ]
+    },
+    {
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "name": "Telepresence Debug",
+      "restart": true,
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/ts-node-dev",
+      "skipFiles": [ "<node_internals>/**" ],
+      "type": "node",
+      "runtimeArgs": [ "--respawn" ],
+      "envFile": "/tmp/billing-gateway/.env",
+      "args": [ "${workspaceFolder}/src/index.ts" ]
+    }
+  ]
+}
