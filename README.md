@@ -24,13 +24,23 @@ Special care should be taken if you intend to use the file mounting feature. See
 ```bash
 mkdir -p /tmp/billing-gateway # Set up tmp directory to store env file and mounts
 
-# Launch a shell with port forwarding
+# Connect to the k8s cluster
+telepresence connect
+
+# Launch a shell with port forwarding and environment variable injection from billing-gateway
 telepresence intercept billing-gateway -n kubecon2023 --port 8080:app --env-file /tmp/billing-gateway/.env --mount /tmp/telepresence-mounts/billing-gateway -- /bin/sh
+# Set up local soft links to ensure consistent directory structure
 ln -s /tmp/telepresence-mounts/billing-gateway/tmp/billing-gateway/mounts /tmp/billing-gateway/mounts
+
+# Launch a shell with port forwarding and environment variable injection from converter
+telepresence intercept converter -n kubecon2023 --port 8081:app -- /bin/sh
+
 ```
 
-Once an intercept is active, you can consider your local machine "inside" the target k8s cluster: 
+Once Telepresence is connected to a cluster, you can consider your local machine "inside" the target k8s cluster: 
 - DNS to `.cluster.local` endpoints will resolve correctly to the appropriate ClusterIP
+
+Once an intercept is active:
 - Telepresnce will forward traffic on the local port (eg. 8080) to the target port on the Deployment (eg. app)
 - Environment variables are injected into the target process (eg. /bin/sh)
 - Environment variables are stored in a dotenv file (eg. /tmp/.env.billing-gateway-telepresence)

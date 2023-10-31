@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask, request
 
 # Get environment variables
-load_dotenv()
+load_dotenv(override=True)
 PORT = os.getenv('PORT')
 RUN_ENV = os.environ.get('RUN_ENV')
 
@@ -30,4 +30,4 @@ def convert():
   }
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0', port=PORT)       
+  app.run(host='0.0.0.0', port=PORT, debug=True)       
