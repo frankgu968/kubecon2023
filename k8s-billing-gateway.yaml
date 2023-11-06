@@ -41,17 +41,17 @@ spec:
         envFrom:
         - configMapRef:
             name: billing-gateway-config
-      #   volumeMounts:
-      #   - name: apikey-volume
-      #     mountPath: /tmp/billing-gateway/mounts
-      #     readOnly: true
-      # volumes:
-      # - name: apikey-volume
-      #   secret:
-      #     secretName: apikey-secret
-      #     items:
-      #     - key: apikey.txt
-      #       path: apikey.txt
+        volumeMounts:
+        - name: apikey-volume
+          mountPath: /tmp/billing-gateway/mounts
+          readOnly: true
+      volumes:
+      - name: apikey-volume
+        secret:
+          secretName: apikey-secret
+          items:
+          - key: apikey.txt
+            path: apikey.txt
 ---
 apiVersion: v1
 kind: Service
