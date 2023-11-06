@@ -6,7 +6,8 @@ metadata:
 data:
   PORT: "8080"
   RUN_ENV: "production"
-  CONV_SRV_URL: "http://converter.kubecon2023.svc.cluster.local:7001"
+  PGHOST: "postgres-postgresql.pg.svc.cluster.local"
+  PGPORT: "5432"
 ---
 apiVersion: v1
 kind: Secret
@@ -14,7 +15,7 @@ metadata:
   name: apikey-secret
 type: Opaque
 data:
-  apikey.txt: c3VwZXJzZWNyZXR2YWx1ZQ==
+  apikey.txt: c3VwZXJzZWNyZXR2YWx1ZQ== # supersecretvalue
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -34,13 +35,15 @@ spec:
     spec:
       containers:
       - name: app
-        image: "frankgu968/kubecon2023-billing-gateway:latest"
+        image: "frankgu968/kubecon2023-billing-gateway:demo"
         ports:
         - name: app
           containerPort: 8080
         envFrom:
         - configMapRef:
             name: billing-gateway-config
+        - secretRef: 
+            name: pg-secret
         volumeMounts:
         - name: apikey-volume
           mountPath: /tmp/billing-gateway/mounts
@@ -65,3 +68,12 @@ spec:
       protocol: TCP
       port: 7000
       targetPort: 8080
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pg-secret
+type: Opaque
+data:
+  PGUSER: cG9zdGdyZXM=         # postgres
+  PGPASSWORD: a3ViZWNvbjIwMjM= # kubecon2023

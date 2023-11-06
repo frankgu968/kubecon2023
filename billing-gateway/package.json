@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node build/index.js",
-    "dev": "ts-node-dev --respawn src/index.ts", 
+    "dev": "ts-node-dev --respawn src/index.ts",
     "intercept": "telepresence intercept billing-gateway -n kubecon2023 --port 8080:7000 --env-file /tmp/.env.telepresence-billing-gateway -- /bin/sh"
   },
   "repository": {
@@ -20,11 +20,13 @@
   },
   "homepage": "https://github.com/frankgu968/Kubecon2023#readme",
   "dependencies": {
+    "@types/pg": "^8.10.8",
     "axios": "^1.6.0",
     "concurrently": "^8.2.2",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@types/express": "^4.17.20",

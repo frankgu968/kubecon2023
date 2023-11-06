@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: frankgu968/kubecon2023-converter:latest
+        image: frankgu968/kubecon2023-converter:demo
         ports:
         - name: app
           containerPort: 8081

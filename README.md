@@ -5,13 +5,18 @@ My Kubecon2023 talk on "How We Optimized Developer Productivity with Telepresenc
 
 ## Commands
 ```bash
-kubectl create ns kubecon2023
-kubectl apply -f k8s-billing-gateway.yaml -n kubecon2023
-kubectl apply -f k8s-converter.yaml -n kubecon2023
+# Install the postgresql dependency
+kubectl create ns pg
+helm install -n pg postgres oci://registry-1.docker.io/bitnamicharts/postgresql --set global.postgresql.auth.password="kubecon2023"
 
-## To delete
-# kubectl delete -f k8s-billing-gateway.yaml
-# kubectl delete -f k8s-converter.yaml
+# Create the demo app
+kubectl create ns kubecon2023
+kubectl apply -f infrastructure/k8s-billing-gateway.yaml -n kubecon2023
+kubectl apply -f infrastructure/k8s-converter.yaml -n kubecon2023
+
+# To delete
+kubectl delete ns kubecon2023
+kubectl delete ns pg
 ```
 
 # Telepresence Commands
@@ -31,6 +36,9 @@ telepresence connect
 telepresence intercept billing-gateway -n kubecon2023 --port 8080:app --env-file /tmp/billing-gateway/.env --mount /tmp/telepresence-mounts/billing-gateway -- /bin/sh
 # Set up local soft links to ensure consistent directory structure
 ln -s /tmp/telepresence-mounts/billing-gateway/tmp/billing-gateway/mounts /tmp/billing-gateway/mounts
+
+## Run migration and seed database INSIDE THE TELEPRESENCE SHELL
+psql -a -f ./infrastructure/setup-pg.sql
 
 # Launch a shell with port forwarding and environment variable injection from converter
 telepresence intercept converter -n kubecon2023 --port 8081:app -- /bin/sh
