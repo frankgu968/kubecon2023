@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    external-dns.alpha.kubernetes.io/alias: "true"
+    external-dns.alpha.kubernetes.io/exclude: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_hide_header l5d-remote-ip;
+      proxy_hide_header l5d-server-id;
+  name: billing-gateway
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: demo.kubecon.development.voiceflow.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: billing-gateway
+            port:
+              name: app
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - '*.development.voiceflow.com'
+    - '*.kubecon.development.voiceflow.com'
+    secretName: billing-gateway-tls
