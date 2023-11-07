@@ -33,7 +33,13 @@ mkdir -p /tmp/billing-gateway # Set up tmp directory to store env file and mount
 telepresence connect
 
 # Launch a shell with port forwarding and environment variable injection from billing-gateway
-telepresence intercept billing-gateway -n kubecon2023 --port 8080:app --env-file /tmp/billing-gateway/.env --mount /tmp/telepresence-mounts/billing-gateway -- /bin/sh
+telepresence \
+  intercept billing-gateway \
+  -n kubecon2023 --port 8080:app \
+  --env-file /tmp/billing-gateway/.env \
+  --mount /tmp/telepresence-mounts/billing-gateway \
+  -- /bin/sh
+
 # Set up local soft links to ensure consistent directory structure
 ln -s /tmp/telepresence-mounts/billing-gateway/tmp/billing-gateway/mounts /tmp/billing-gateway/mounts
 
@@ -41,8 +47,10 @@ ln -s /tmp/telepresence-mounts/billing-gateway/tmp/billing-gateway/mounts /tmp/b
 psql -a -f ./infrastructure/setup-pg.sql
 
 # Launch a shell with port forwarding and environment variable injection from converter
-telepresence intercept converter -n kubecon2023 --port 8081:app -- /bin/sh
-
+telepresence \
+  intercept converter \
+  -n kubecon2023 --port 8081:app \
+  -- /bin/sh
 ```
 
 Once Telepresence is connected to a cluster, you can consider your local machine "inside" the target k8s cluster: 
