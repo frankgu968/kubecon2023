@@ -5,8 +5,8 @@ import fs from 'fs';
 const apiKey = fs.readFileSync('/tmp/billing-gateway/mounts/apikey.txt', 'utf8');
 
 export const authFunc = (req: Request, res: Response, next: NextFunction) => {
-  const key = req.headers['x-api-key'];
-  if (key && key === apiKey) {
+  const key = req.headers['x-api-key']; // FIXME: incorrect header
+  if (key === `Bearer ${apiKey}`) {
     next();
   } else {
     res.status(401).send('Unauthorized');

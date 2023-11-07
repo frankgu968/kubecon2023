@@ -10,11 +10,13 @@ app.get('/metadata', (_req: Request, res: Response) => {
   res.send(`billing-gateway v${version} is running in ${runEnv} environment!`);
 });
 
+// PRIVATE ROUTES
+app.use(authFunc);
+
 // User balance controller
 app.get('/balance/:user', getBalanceHandler);
 
 // Registering auth middleware after the metadata route since that should not be guarded
-app.use(authFunc);
 app.post('/charge', chargeBalanceHandler);
 
 app.listen(port, '0.0.0.0', () => {
